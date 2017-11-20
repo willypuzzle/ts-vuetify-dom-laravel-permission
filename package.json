@@ -1,0 +1,44 @@
+{
+  "author": {
+    "name": "Domenico Rizzo",
+    "email": "domenico.rizzo@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/willypuzzle/ts-vuetify-dom-laravel-permission/issues"
+  },
+  "dependencies": {
+    "axios": "^0.16.2",
+    "vuetify": "^0.16.8",
+    "lodash": "^4.17.4",
+    "ts-vue-dom-waiter": "^0.0.1",
+    "ts-vuetify-dom-datatable": "^0.0.1",
+    "ts-vuetify-dom-dynamic-matrix": "^0.0.1",
+    "ts-vuetify-dom-field": "^0.0.1"
+  },
+  "description": "Typescript-vuetify willypuzzle/laravel-permission web interface",
+  "devDependencies": {},
+  "directories": {},
+  "homepage": "https://github.com/willypuzzle/ts-vuetify-dom-laravel-permission",
+  "keywords": [
+    "laravel-permission",
+    "vuetify"
+  ],
+  "license": "ISC",
+  "main": "LaravelPermission.vue",
+  "maintainers": [
+    {
+      "name": "willypuzzle",
+      "email": "domenico.rizzo@gmail.com"
+    }
+  ],
+  "name": "ts-vuetify-dom-laravel-permission",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/willypuzzle/ts-vuetify-dom-laravel-permission.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.0.1"
+}
