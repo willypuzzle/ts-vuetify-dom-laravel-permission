@@ -8,12 +8,13 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
-    "vuetify": "^0.16.8",
+    "vuetify": "^0.17.1",
     "lodash": "^4.17.4",
-    "ts-vue-dom-waiter": "^0.0.1",
-    "ts-vuetify-dom-datatable": "^0.0.1",
-    "ts-vuetify-dom-dynamic-matrix": "^0.0.1",
-    "ts-vuetify-dom-field": "^0.0.1"
+    "ts-vue-dom-helper": "^0.0.2",
+    "ts-vue-dom-waiter": "^0.0.2",
+    "ts-vuetify-dom-datatable": "^0.0.7",
+    "ts-vuetify-dom-dynamic-matrix": "^0.0.3",
+    "ts-vuetify-dom-field": "^0.0.4"
   },
   "description": "Typescript-vuetify willypuzzle/laravel-permission web interface",
   "devDependencies": {},
@@ -40,5 +41,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.0.1"
+  "version": "0.0.4"
 }
