@@ -79,7 +79,7 @@
                 </div>
             </template>
         </datatable>
-        <v-dialog v-model="rolesDialog" :persistent="rolesDialogLoading">
+        <v-dialog v-model="rolesDialog" :persistent="rolesDialogLoading" max-width="500px">
             <v-card>
                 <v-card-title class="headline">{{ getTranslation('users.table.modify.roles.title') }}</v-card-title>
                 <v-card-text>

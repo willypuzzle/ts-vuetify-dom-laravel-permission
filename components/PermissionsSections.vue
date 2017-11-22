@@ -3,6 +3,7 @@
         <datatable
                 ref="datatable"
                 :headers="headers"
+                :locale="locale"
                 :transport="transport"
                 add
         >

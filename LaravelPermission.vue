@@ -11,9 +11,8 @@
                 :roles-download-url="userComponent.rolesDownloadUrl ? userComponent.rolesDownloadUrl : ( rolesComponent.urlPrefix ? `${rolesComponent.urlPrefix}/all` : `${urlPrefix}/roles/all`)"
                 :event-bus-configuration="eventBusConfiguration"
         ></users>
-        <!-- TODO role-download-url has to receive global url (from roles object) too (if userComponent.rolesDownloadUrl is not set) -->
         <roles
-                v-if="section === 'roles'"
+                v-else-if="section === 'roles'"
                 :locale="locale"
                 :table="rolesComponent.table"
                 :axios="axios"
@@ -23,7 +22,7 @@
                 :show-user-management="rolesComponent.showUserManagement"
         ></roles>
         <permissions-sections
-                v-if="section === 'permissions'"
+                v-else-if="section === 'permissions'"
                 :component-name="section"
                 :locale="locale"
                 :axios="axios"
@@ -31,20 +30,23 @@
                 :event-bus-configuration="eventBusConfiguration"
         ></permissions-sections>
         <permissions-sections
-                v-if="section === 'sections'"
+                v-else-if="section === 'sections'"
                 :component-name="section"
                 :locale="locale"
                 :axios="axios"
                 :url-prefix="rolesComponent.urlPrefix || `${this.urlPrefix}/sections`"
                 :event-bus-configuration="eventBusConfiguration"
         ></permissions-sections>
-        <acl-manager v-if="section === 'manager'"
+        <acl-manager v-else-if="section === 'manager'"
                 :data-transfer-url="aclManagerConfiguration.dataTransferUrl ? aclManagerConfiguration.dataTransferUrl : ( aclManagerConfiguration.urlPrefix ? `${aclManagerConfiguration.urlPrefix}/matrix-hook` : `${this.urlPrefix}/matrix-hook`)"
                 :permissions-download-url="aclManagerConfiguration.permissionsDownloadUrl ? aclManagerConfiguration.permissionsDownloadUrl : ( aclManagerConfiguration.urlPrefix ? `${aclManagerConfiguration.urlPrefix}/permissions/all` : `${this.urlPrefix}/permissions/all`)"
                 :roles-download-url="aclManagerConfiguration.rolesDownloadUrl ? aclManagerConfiguration.rolesDownloadUrl : ( aclManagerConfiguration.urlPrefix ? `${aclManagerConfiguration.urlPrefix}/roles/all` : `${this.urlPrefix}/roles/all`)"
                 :sections-download-url="aclManagerConfiguration.sectionsDownloadUrl ? aclManagerConfiguration.sectionsDownloadUrl : ( aclManagerConfiguration.urlPrefix ? `${aclManagerConfiguration.urlPrefix}/sections/all` : `${this.urlPrefix}/sections/all`)"
                 :users-download-url="aclManagerConfiguration.usersDownloadUrl ? aclManagerConfiguration.usersDownloadUrl : ( aclManagerConfiguration.urlPrefix ? `${aclManagerConfiguration.urlPrefix}/users/all` : `${this.urlPrefix}/users/all`)"
         ></acl-manager>
+        <div v-else>
+            Choose a proper section prop values are: users, roles, permissions, sections, manager
+        </div>
     </div>
 </template>
 

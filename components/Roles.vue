@@ -3,6 +3,7 @@
         <datatable
                 ref="datatable"
                 :headers="headers"
+                :locale="locale"
                 :transport="transport"
                 @update="updateComplete($event)"
                 v-on:update-error="updateComplete($event, true)"
@@ -88,7 +89,7 @@
                 </div>
             </template>
         </datatable>
-        <v-dialog v-model="usersDialog" :persistent="usersDialogLoading">
+        <v-dialog v-model="usersDialog" :persistent="usersDialogLoading" max-width="500px">
             <v-card>
                 <v-card-title class="headline">{{ getTranslation('roles.table.modify.users.title') }}</v-card-title>
                 <v-card-text>
