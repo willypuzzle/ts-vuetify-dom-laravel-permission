@@ -96,13 +96,13 @@
             buildRows(data : Array<{ name: string, id: number }>) : void{
                 this.rows = [];
                 _.each(data, (el) => {
-                    this.rows.push({ key: el.id, name: `${el.name}-(${el.id})`});
+                    this.rows.push({ key: String(el.id), name: `${el.name}-(${el.id})`});
                 })
             },
             buildColumns(data : Array<{ name: string, id: number }>) : void{
                 this.columns = [];
                 _.each(data, (el) => {
-                    this.columns.push({ key: el.id, name: `${el.name}`});
+                    this.columns.push({ key: String(el.id), name: `${el.name}`});
                 })
             },
             getData() : void{
