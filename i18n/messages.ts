@@ -197,6 +197,9 @@ export default {
                     },
                     state: {
                         text: 'Stato'
+                    },
+                    surname: {
+                        text: 'Cognome'
                     }
                 },
                 inputs: {
@@ -205,6 +208,9 @@ export default {
                     },
                     state: {
                         label: 'Stato'
+                    },
+                    surname: {
+                        label: 'Cognome'
                     }
                 },
                 create: {
@@ -420,6 +426,9 @@ export default {
                     },
                     state: {
                         text: 'State'
+                    },
+                    surname: {
+                        text: 'Surname'
                     }
                 },
                 inputs: {
@@ -428,7 +437,10 @@ export default {
                     },
                     state: {
                         label: 'State'
-                    }
+                    },
+                    surname: {
+                        label: 'Surname'
+                    },
                 },
                 create: {
                     title: 'New User'

@@ -30,6 +30,24 @@
                         ></v-text-field>
                     </v-edit-dialog>
                 </td>
+                <td v-if="!user.hideSurname" class="">
+                    <v-edit-dialog
+                            @open="props.item._surname = props.item.surname"
+                            @cancel="props.item.surname = props.item._surname || props.item.surname"
+                            lazy
+                    >
+                        {{ props.item.surname }}
+                        <v-text-field
+                                slot="input"
+                                :label="getTranslation('users.table.inputs.surname.label')"
+                                single-line
+                                :value="props.item.surname"
+                                v-validate="table.inputs && table.inputs.surname ? table.inputs.surname.validation : null"
+                                :name="'table-name-' + props.item.id"
+                                @change="props.edit(props.item,'surname', $event, 'table-surname-' + props.item.id)"
+                        ></v-text-field>
+                    </v-edit-dialog>
+                </td>
                 <td v-if="user.state">
                     <v-select
                             :items="userStateItems"
@@ -133,7 +151,8 @@
         state?: {
             enabled: any;
             disabled: any;
-        }
+        },
+        hideSurname?: boolean;
     }
 
     interface UsersComponent extends GeneralComponentInterface{
@@ -198,30 +217,30 @@
             }
 
             if(this.user.state){
-                this.headers.splice(2, 0, {
-                    align: 'center',
-                    searchable: false,
-                    sortable: true,
-                    text: this.getTranslation('users.table.headers.state.text'),
-                    value: 'state',
-                    width: '50px'
-                });
+                // this.headers.splice(2, 0, {
+                //     align: 'center',
+                //     searchable: false,
+                //     sortable: true,
+                //     text: this.getTranslation('users.table.headers.state.text'),
+                //     value: 'state',
+                //     width: '50px'
+                // });
 
                 this.userStateItems[0].value = this.user.state.enabled;
                 this.userStateItems[1].value = this.user.state.disabled;
             }
 
-            if(this.openDetailFunction){
-                let index = this.user.state ? 4 : 3;
-                this.headers.splice(index, 0, {
-                    align: 'center',
-                    searchable: false,
-                    sortable: false,
-                    text: this.getTranslation('users.table.headers.detail.text'),
-                    value: 'detail',
-                    width: '50px'
-                });
-            }
+            // if(this.openDetailFunction){
+            //     let index = this.user.state ? 4 : 3;
+            //     this.headers.splice(index, 0, {
+            //         align: 'center',
+            //         searchable: false,
+            //         sortable: false,
+            //         text: this.getTranslation('users.table.headers.detail.text'),
+            //         value: 'detail',
+            //         width: '50px'
+            //     });
+            // }
         },
         mixins: [GeneralComponent],
         components: {
@@ -258,11 +277,35 @@
                     },
                     {
                         align: 'center',
+                        text: this.getTranslation('users.table.headers.surname.text'),
+                        value: 'name',
+                        hidden: this.user.hideSurname
+                    },
+                    {
+                        align: 'center',
+                        searchable: false,
+                        sortable: true,
+                        text: this.getTranslation('users.table.headers.state.text'),
+                        value: 'state',
+                        width: '50px',
+                        hidden: !this.user.state
+                    },
+                    {
+                        align: 'center',
                         searchable: false,
                         sortable: false,
                         text: this.getTranslation('users.table.headers.roles.text'),
                         value: 'roles',
                         width: '50px'
+                    },
+                    {
+                        align: 'center',
+                        searchable: false,
+                        sortable: false,
+                        text: this.getTranslation('users.table.headers.detail.text'),
+                        value: 'detail',
+                        width: '50px',
+                        hidden: !this.openDetailFunction
                     },
                     {
                         align: 'center',
