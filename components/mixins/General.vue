@@ -6,6 +6,7 @@
     import {Header, Transport} from 'ts-vuetify-dom-datatable'
     import {AxiosStatic} from 'axios';
     import {EventBusConfiguration} from '../../interfaces/configurations'
+    import axios from 'axios'
 
     interface GeneralComponent extends Vue{
         axios: AxiosStatic;
@@ -83,7 +84,15 @@
             getTranslation(key : string, parameters : object = undefined){
                 let m = this.lang();
                 return _.get(m, key, key);
-            }
+            },
+            changeLabel(value, locale, item){
+                let a = this.axios || axios;
+                a.put(this.urlPrefix + '/' + item.id, {
+                    field: 'label',
+                    label: value,
+                    locale: locale
+                })
+            },
         }
     } as ComponentOptions<GeneralComponent>;
 </script>

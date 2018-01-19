@@ -73,6 +73,9 @@ export default {
                     title: 'Nuovo Ruolo',
                     inputs: {
                         name: {
+                            label: 'Codice'
+                        },
+                        label: {
                             label: 'Nome'
                         },
                         state: {
@@ -91,7 +94,10 @@ export default {
                         text: 'ID'
                     },
                     name:{
-                        text: 'Nome'
+                        text: 'Codice'
+                    },
+                    label: {
+                        label: 'Nome'
                     },
                     state: {
                         text: 'Stato'
@@ -102,7 +108,7 @@ export default {
                 },
                 inputs: {
                     name: {
-                        label: 'Nome'
+                        label: 'Codice'
                     },
                     state: {
                         label: 'Stato'

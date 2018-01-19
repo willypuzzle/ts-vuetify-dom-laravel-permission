@@ -11,7 +11,7 @@
         >
             <template slot="columns" slot-scope="props">
                 <td class="text-xs-center">{{ props.item.id }}</td>
-                <td class="">
+                <td v-if="showName" class="">
                     <v-edit-dialog
                             @open="props.item._name = props.item.name"
                             @cancel="props.item.name = props.item._name || props.item.name"
@@ -28,6 +28,16 @@
                                 @change="props.edit(props.item,'name', $event, 'table-name-' + props.item.id)"
                         ></v-text-field>
                     </v-edit-dialog>
+                </td>
+                <td v-if="showName" class="">
+                    <v-text-field
+                            :label="getTranslation('roles.table.inputs.label.label')"
+                            single-line
+                            :value="props.item.label && props.item.label[locale] ? props.item.label[locale] : props.item"
+                            v-validate="'required'"
+                            :name="'table-label-' + props.item.id"
+                            @input="changeLabel($event, locale, props.item)"
+                    ></v-text-field>
                 </td>
                 <td class="">
                     <v-select
@@ -178,6 +188,10 @@
             userDownloadUrl: {
                 type: String,
                 required: true
+            },
+            showName: {
+                type: Boolean,
+                default: true
             }
         },
         data(){
@@ -194,6 +208,12 @@
                         align: 'center',
                         text: this.getTranslation('roles.table.headers.name.text'),
                         value: 'name',
+                        hidden: !this.showName
+                    },
+                    {
+                        align: 'center',
+                        text: this.getTranslation('roles.table.headers.label.text'),
+                        value: 'label',
                     },
                     {
                         align: 'center',
