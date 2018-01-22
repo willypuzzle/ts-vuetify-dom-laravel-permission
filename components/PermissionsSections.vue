@@ -9,7 +9,7 @@
         >
             <template slot="columns" slot-scope="props">
                 <td class="text-xs-center">{{ props.item.id }}</td>
-                <td class="">
+                <td v-if="showName" class="">
                     <v-edit-dialog
                             @open="props.item._name = props.item.name"
                             @cancel="props.item.name = props.item._name || props.item.name"
@@ -26,6 +26,16 @@
                                 @change="props.edit(props.item,'name', $event, 'table-name-' + props.item.id)"
                         ></v-text-field>
                     </v-edit-dialog>
+                </td>
+                <td class="">
+                    <v-text-field
+                            :label="getTranslation(`${componentName}.table.inputs.label.label`)"
+                            single-line
+                            :value="props.item.label && props.item.label[locale] ? props.item.label[locale] : props.item.name"
+                            v-validate="'required'"
+                            :name="'table-label-' + props.item.id"
+                            @input="changeLabel($event, locale, props.item)"
+                    ></v-text-field>
                 </td>
                 <td class="">
                     <v-select
@@ -54,10 +64,19 @@
             <template slot="create_content" slot-scope="props">
                 <div>
                     <v-text-field
+                            v-if="showName"
                             :label="getTranslation(`${componentName}.table.create.inputs.name.label`)"
                             v-validate="'required'"
                             name="create-name"
                             v-model="transport.create.data.models.name"
+                            autocomplete="off"
+                    ></v-text-field>
+                    <v-text-field
+                            :label="getTranslation(`${componentName}.table.create.inputs.label.label`)"
+                            v-validate="'required'"
+                            name="create-label"
+                            :value="transport.create.data.models.label"
+                            @input="manageLabelInCreation($event, transport.create.data.models, locale)"
                             autocomplete="off"
                     ></v-text-field>
                     <v-select
@@ -151,10 +170,14 @@
                         url: this.urlPrefix,
                         data: {
                             models: {
+                                label: null,
+                                locale: null,
                                 name: null,
                                 state: null
                             },
                             defaults: {
+                                label: null,
+                                locale: this.locale,
                                 name: null,
                                 state: this.componentName == 'permissions' ? PERMISSION_CONSTANTS.STATE_DISABLED : SECTION_CONSTANTS.STATE_DISABLED
                             }

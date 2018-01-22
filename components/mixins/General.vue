@@ -8,6 +8,8 @@
     import {EventBusConfiguration} from '../../interfaces/configurations'
     import axios from 'axios'
 
+    import randomstring from 'randomstring'
+
     interface GeneralComponent extends Vue{
         axios: AxiosStatic;
         headers: Array<Header>;
@@ -39,6 +41,10 @@
             locale: {
                 type: String,
                 default: 'it'
+            },
+            showName: {
+                type: Boolean,
+                default: true
             },
             table: {
                 type:Object,
@@ -93,6 +99,17 @@
                     locale: locale
                 })
             },
+            manageLabelInCreation(value, models, locale){
+                if(!this.showName){
+                    models.name = randomstring.generate({
+                        length: 32,
+                        charset: 'hex'
+                    });
+                }
+
+                models.label = value;
+                models.locale = locale;
+            }
         }
     } as ComponentOptions<GeneralComponent>;
 </script>

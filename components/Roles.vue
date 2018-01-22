@@ -29,11 +29,11 @@
                         ></v-text-field>
                     </v-edit-dialog>
                 </td>
-                <td v-if="showName" class="">
+                <td class="">
                     <v-text-field
                             :label="getTranslation('roles.table.inputs.label.label')"
                             single-line
-                            :value="props.item.label && props.item.label[locale] ? props.item.label[locale] : props.item"
+                            :value="props.item.label && props.item.label[locale] ? props.item.label[locale] : props.item.name"
                             v-validate="'required'"
                             :name="'table-label-' + props.item.id"
                             @input="changeLabel($event, locale, props.item)"
@@ -71,10 +71,19 @@
             <template slot="create_content" slot-scope="props">
                 <div>
                     <v-text-field
+                            v-if="showName"
                             :label="getTranslation('roles.table.create.inputs.name.label')"
                             v-validate="'required'"
                             name="create-name"
                             v-model="transport.create.data.models.name"
+                            autocomplete="off"
+                    ></v-text-field>
+                    <v-text-field
+                            :label="getTranslation('roles.table.create.inputs.label.label')"
+                            v-validate="'required'"
+                            name="create-label"
+                            :value="transport.create.data.models.label"
+                            @input="manageLabelInCreation($event, transport.create.data.models, locale)"
                             autocomplete="off"
                     ></v-text-field>
                     <v-select
@@ -188,10 +197,6 @@
             userDownloadUrl: {
                 type: String,
                 required: true
-            },
-            showName: {
-                type: Boolean,
-                default: true
             }
         },
         data(){
@@ -249,11 +254,15 @@
                         data: {
                             models: {
                                 name: null,
+                                label: null,
+                                locale: null,
                                 state: null,
                                 users: null
                             },
                             defaults: {
                                 name: null,
+                                label: null,
+                                locale: this.locale,
                                 state: ROLES_CONSTANTS.STATE_DISABLED,
                                 users: []
                             }
