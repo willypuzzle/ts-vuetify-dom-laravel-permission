@@ -29,6 +29,7 @@
                 :user-download-url="rolesComponent.usersDownloadUrl ? rolesComponent.usersDownloadUrl : ( userComponent.urlPrefix ? `${userComponent.urlPrefix}/all` : `${urlPrefix}/users/all`)"
                 :event-bus-configuration="eventBusConfiguration"
                 :show-user-management="rolesComponent.showUserManagement"
+                :show-name="showName"
         ></roles>
         <permissions-sections
                 v-else-if="ready && section === 'permissions'"
@@ -37,6 +38,7 @@
                 :axios="axios"
                 :url-prefix="`${this.urlPrefix}/permissions`"
                 :event-bus-configuration="eventBusConfiguration"
+                :show-name="showName"
         ></permissions-sections>
         <permissions-sections
                 v-else-if="ready && section === 'sections'"
@@ -45,6 +47,7 @@
                 :axios="axios"
                 :url-prefix="`${this.urlPrefix}/sections${sectionDownloadUrlType}`"
                 :event-bus-configuration="eventBusConfiguration"
+                :show-name="showName"
         ></permissions-sections>
         <permissions-sections
                 v-else-if="ready && section === 'section_types'"
@@ -53,6 +56,7 @@
                 :axios="axios"
                 :url-prefix="sectionTypesDownloadUrl"
                 :event-bus-configuration="eventBusConfiguration"
+                :show-name="showName"
         ></permissions-sections>
         <acl-manager v-else-if="ready && section === 'manager'"
                 :data-transfer-url="aclManagerConfiguration.dataTransferUrl ? aclManagerConfiguration.dataTransferUrl : ( aclManagerConfiguration.urlPrefix ? `${aclManagerConfiguration.urlPrefix}/matrix-hook` : `${this.urlPrefix}/matrix-hook`)"
@@ -136,10 +140,10 @@
         created(){
             if(this.section === 'sections' || this.section === 'manager'){
                 this.tryToactivateWaiter(true);
-                let url = `${this.sectionTypesDownloadUrl}/checkAndDownload`;
+                let url = `${this.sectionTypesDownloadUrl}/all`;
                 this.axiosChoosen.get(url).then((response) => {
-                    if(response.data.response){
-                        this.sectionTypes = response.data.data;
+                    if(response.data && response.data.length > 0){
+                        this.sectionTypes = response.data;
                         this.sectionTypesStripped = stripForSelect(this.sectionTypes, this.locale);
                     }
                     this.ready = true;
@@ -183,6 +187,10 @@
             section: {
                 type: String,
                 required: true
+            },
+            showName:{
+                type: Boolean,
+                default: true
             },
             urlPrefix: {
                 type: String
