@@ -14,7 +14,12 @@ export default {
                 }
             }
         },
-        permissions: {
+        permissions_sections: {
+            general: {
+                section_types: {
+                    label: 'Moduli'
+                }
+            },
             state: {
                 disabled: {
                     text: 'Disabilitato'
@@ -25,9 +30,12 @@ export default {
             },
             table: {
                 create: {
-                    title: 'Nuovo Permesso',
+                    title: 'Nuova Sezione',
                     inputs: {
                         name: {
+                            label: 'Codice'
+                        },
+                        label: {
                             label: 'Nome'
                         },
                         state: {
@@ -43,6 +51,9 @@ export default {
                         text: 'ID'
                     },
                     name:{
+                        text: 'Codice'
+                    },
+                    label:{
                         text: 'Nome'
                     },
                     state: {
@@ -51,7 +62,10 @@ export default {
                 },
                 inputs: {
                     name: {
-                        label: 'Nome'
+                        label: 'Codice'
+                    },
+                    label:{
+                        text: 'Nome'
                     },
                     state: {
                         label: 'Stato'
@@ -130,51 +144,6 @@ export default {
                 }
             }
         },
-        sections: {
-            state: {
-                disabled: {
-                    text: 'Disabilitato'
-                },
-                enabled: {
-                    text: 'Abilitato'
-                }
-            },
-            table: {
-                create: {
-                    title: 'Nuova Sezione',
-                    inputs: {
-                        name: {
-                            label: 'Nome'
-                        },
-                        state: {
-                            label: 'Stato'
-                        }
-                    }
-                },
-                headers: {
-                    delete:{
-                        text: 'Elimina'
-                    },
-                    id: {
-                        text: 'ID'
-                    },
-                    name:{
-                        text: 'Nome'
-                    },
-                    state: {
-                        text: 'Stato'
-                    }
-                },
-                inputs: {
-                    name: {
-                        label: 'Nome'
-                    },
-                    state: {
-                        label: 'Stato'
-                    }
-                }
-            }
-        },
         users: {
             state: {
                 disabled: {
@@ -249,7 +218,12 @@ export default {
                 }
             }
         },
-        permissions: {
+        permissions_sections: {
+            general: {
+                section_types: {
+                    label: 'Moduls'
+                }
+            },
             state: {
                 disabled: {
                     text: 'Disabled'
@@ -260,9 +234,12 @@ export default {
             },
             table: {
                 create: {
-                    title: 'New Permission',
+                    title: 'New Section',
                     inputs: {
                         name: {
+                            label: 'Code'
+                        },
+                        label: {
                             label: 'Name'
                         },
                         state: {
@@ -278,6 +255,9 @@ export default {
                         text: 'ID'
                     },
                     name:{
+                        text: 'Code'
+                    },
+                    label:{
                         text: 'Name'
                     },
                     state: {
@@ -286,6 +266,9 @@ export default {
                 },
                 inputs: {
                     name: {
+                        label: 'Code'
+                    },
+                    label: {
                         label: 'Name'
                     },
                     state: {
@@ -355,51 +338,6 @@ export default {
                             confirm: 'Confirm',
                             dismiss: 'Dismiss'
                         }
-                    }
-                }
-            }
-        },
-        sections: {
-            state: {
-                disabled: {
-                    text: 'Disabled'
-                },
-                enabled: {
-                    text: 'Enabled'
-                }
-            },
-            table: {
-                create: {
-                    title: 'New Section',
-                    inputs: {
-                        name: {
-                            label: 'Name'
-                        },
-                        state: {
-                            label: 'State'
-                        }
-                    }
-                },
-                headers: {
-                    delete:{
-                        text: 'Delete'
-                    },
-                    id: {
-                        text: 'ID'
-                    },
-                    name:{
-                        text: 'Name'
-                    },
-                    state: {
-                        text: 'State'
-                    }
-                },
-                inputs: {
-                    name: {
-                        label: 'Name'
-                    },
-                    state: {
-                        label: 'State'
                     }
                 }
             }

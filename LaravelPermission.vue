@@ -1,7 +1,16 @@
 <template>
     <div>
+        <template v-if="ready && (section === 'sections' || section === 'manager') && sectionTypes && sectionTypes.length">
+            <v-select
+                    :items="sectionTypesStripped"
+                    v-model="sectionTypeSelected"
+                    :label="getTranslation('permissions_sections.general.section_types.label')"
+                    item-text="label"
+                    item-value="id"
+            > </v-select>
+        </template>
         <users
-                v-if="section === 'users'"
+                v-if="ready && section === 'users'"
                 :locale="locale"
                 :open-detail-function="userComponent.openDetailFunction"
                 :table="userComponent.table"
@@ -12,7 +21,7 @@
                 :event-bus-configuration="eventBusConfiguration"
         ></users>
         <roles
-                v-else-if="section === 'roles'"
+                v-else-if="ready && section === 'roles'"
                 :locale="locale"
                 :table="rolesComponent.table"
                 :axios="axios"
@@ -22,38 +31,50 @@
                 :show-user-management="rolesComponent.showUserManagement"
         ></roles>
         <permissions-sections
-                v-else-if="section === 'permissions'"
+                v-else-if="ready && section === 'permissions'"
                 :component-name="section"
                 :locale="locale"
                 :axios="axios"
-                :url-prefix="rolesComponent.urlPrefix || `${this.urlPrefix}/permissions`"
+                :url-prefix="`${this.urlPrefix}/permissions`"
                 :event-bus-configuration="eventBusConfiguration"
         ></permissions-sections>
         <permissions-sections
-                v-else-if="section === 'sections'"
+                v-else-if="ready && section === 'sections'"
                 :component-name="section"
                 :locale="locale"
                 :axios="axios"
-                :url-prefix="rolesComponent.urlPrefix || `${this.urlPrefix}/sections`"
+                :url-prefix="`${this.urlPrefix}/sections${sectionDownloadUrlType}`"
                 :event-bus-configuration="eventBusConfiguration"
         ></permissions-sections>
-        <acl-manager v-else-if="section === 'manager'"
+        <permissions-sections
+                v-else-if="ready && section === 'section_types'"
+                :component-name="section"
+                :locale="locale"
+                :axios="axios"
+                :url-prefix="sectionTypesDownloadUrl"
+                :event-bus-configuration="eventBusConfiguration"
+        ></permissions-sections>
+        <acl-manager v-else-if="ready && section === 'manager'"
                 :data-transfer-url="aclManagerConfiguration.dataTransferUrl ? aclManagerConfiguration.dataTransferUrl : ( aclManagerConfiguration.urlPrefix ? `${aclManagerConfiguration.urlPrefix}/matrix-hook` : `${this.urlPrefix}/matrix-hook`)"
                 :permissions-download-url="aclManagerConfiguration.permissionsDownloadUrl ? aclManagerConfiguration.permissionsDownloadUrl : ( aclManagerConfiguration.urlPrefix ? `${aclManagerConfiguration.urlPrefix}/permissions/all` : `${this.urlPrefix}/permissions/all`)"
                 :roles-download-url="aclManagerConfiguration.rolesDownloadUrl ? aclManagerConfiguration.rolesDownloadUrl : ( aclManagerConfiguration.urlPrefix ? `${aclManagerConfiguration.urlPrefix}/roles/all` : `${this.urlPrefix}/roles/all`)"
-                :sections-download-url="aclManagerConfiguration.sectionsDownloadUrl ? aclManagerConfiguration.sectionsDownloadUrl : ( aclManagerConfiguration.urlPrefix ? `${aclManagerConfiguration.urlPrefix}/sections/all` : `${this.urlPrefix}/sections/all`)"
+                :sections-download-url="aclManagerConfiguration.sectionsDownloadUrl ? `${aclManagerConfiguration.sectionsDownloadUrl}${sectionDownloadUrlType}` : ( aclManagerConfiguration.urlPrefix ? `${aclManagerConfiguration.urlPrefix}/sections/all${sectionDownloadUrlType}` : `${this.urlPrefix}/sections/all${sectionDownloadUrlType}`)"
                 :users-download-url="aclManagerConfiguration.usersDownloadUrl ? aclManagerConfiguration.usersDownloadUrl : ( aclManagerConfiguration.urlPrefix ? `${aclManagerConfiguration.urlPrefix}/users/all` : `${this.urlPrefix}/users/all`)"
         ></acl-manager>
-        <div v-else>
-            Choose a proper section prop values are: users, roles, permissions, sections, manager
-        </div>
     </div>
 </template>
 
 <script lang="ts">
-    import Vue, { ComponentOptions } from 'vue';
+    import Vue from 'vue';
+
+    import axios from 'axios';
 
     import Users, {UserDefinition, UserField} from './components/Users.vue'
+
+    import EventBusManager from './components/mixins/EventBusManager.vue';
+    import Translator from './components/mixins/Translator.vue';
+
+    import {stripForSelect} from './helpers/i18n'
 
     import {AxiosStatic} from 'axios';
 
@@ -93,17 +114,6 @@
         urlPrefix?: string;
     }
 
-    interface LaravelPermissionComponent extends Vue{
-        aclManagerConfiguration: AclManagerComponentConfiguration;
-        axios: AxiosStatic;
-        eventBusConfiguration: EventBusConfiguration;
-        rolesComponent: RoleComponentConfiguration;
-        section: string;
-        urlPrefix: string;
-        userComponent: UserComponentConfiguration;
-        locale: string;
-    }
-
     export {
         AclManagerComponentConfiguration,
         EventBusConfiguration,
@@ -115,12 +125,34 @@
         TableDefinition
     }
 
-    export default {
+    export default Vue.extend({
+        mixins: [EventBusManager, Translator],
         components: {
             'permissions-sections': PermissionsSections,
             'roles': Roles,
             'users': Users,
             'acl-manager': AclManager
+        },
+        created(){
+            if(this.section === 'sections' || this.section === 'manager'){
+                this.tryToactivateWaiter(true);
+                let url = `${this.sectionTypesDownloadUrl}/checkAndDownload`;
+                this.axiosChoosen.get(url).then((response) => {
+                    if(response.data.response){
+                        this.sectionTypes = response.data.data;
+                        this.sectionTypesStripped = stripForSelect(this.sectionTypes, this.locale);
+                    }
+                    this.ready = true;
+                }).catch((err) => {
+                    console.trace();
+                    console.log(err)
+                }).then(() => {
+                    this.tryToactivateWaiter(false);
+                });
+            }else{
+                this.ready = true;
+            }
+
         },
         props: {
             aclManagerConfiguration: {
@@ -159,7 +191,27 @@
                 type: Object,
                 required: true
             }
+        },
+        data(){
+            return {
+                ready: false,
+                sectionTypes: null,
+                sectionTypeSelected: null,
+                sectionTypesStripped: [],
+                axiosChoosen: this.axios || axios,
+                sectionTypesDownloadUrl: `${this.urlPrefix}/section_types`,
+                sectionDownloadUrlType: ''
+            }
+        },
+        watch: {
+            sectionTypeSelected(val){
+                this.sectionDownloadUrlType = `/${val}`;
+                this.ready = false;
+                this.$nextTick(() => {
+                    this.ready = true;
+                })
+            }
         }
-    } as ComponentOptions<LaravelPermissionComponent>;
+    });
 </script>
 

@@ -18,7 +18,7 @@
                         {{ props.item.name }}
                         <v-text-field
                                 slot="input"
-                                :label="getTranslation(`${componentName}.table.inputs.name.label`)"
+                                :label="getTranslation(`permissions_sections.table.inputs.name.label`)"
                                 single-line
                                 :value="props.item.name"
                                 v-validate="'required'"
@@ -29,7 +29,7 @@
                 </td>
                 <td class="">
                     <v-text-field
-                            :label="getTranslation(`${componentName}.table.inputs.label.label`)"
+                            :label="getTranslation(`permissions_sections.table.inputs.label.label`)"
                             single-line
                             :value="props.item.label && props.item.label[locale] ? props.item.label[locale] : props.item.name"
                             v-validate="'required'"
@@ -41,7 +41,7 @@
                     <v-select
                             :items="componentStateItems"
                             v-model="props.item.state"
-                            :label="getTranslation(`${componentName}.table.inputs.state.label`)"
+                            :label="getTranslation(`permissions_sections.table.inputs.state.label`)"
                             v-validate="'required'"
                             :name="'table-state-' + props.item.id"
                             @change="props.edit(props.item,'state', $event, 'table-state-' + props.item.id)"
@@ -60,19 +60,19 @@
                     </v-btn>
                 </td>
             </template>
-            <div slot="create_title">{{ getTranslation(`${componentName}.table.create.title`) }}</div>
+            <div slot="create_title">{{ getTranslation(`permissions_sections.table.create.title`) }}</div>
             <template slot="create_content" slot-scope="props">
                 <div>
                     <v-text-field
                             v-if="showName"
-                            :label="getTranslation(`${componentName}.table.create.inputs.name.label`)"
+                            :label="getTranslation(`permissions_sections.table.create.inputs.name.label`)"
                             v-validate="'required'"
                             name="create-name"
                             v-model="transport.create.data.models.name"
                             autocomplete="off"
                     ></v-text-field>
                     <v-text-field
-                            :label="getTranslation(`${componentName}.table.create.inputs.label.label`)"
+                            :label="getTranslation(`permissions_sections.table.create.inputs.label.label`)"
                             v-validate="'required'"
                             name="create-label"
                             :value="transport.create.data.models.label"
@@ -82,7 +82,7 @@
                     <v-select
                             :items="componentStateItems"
                             v-model="transport.create.data.models.state"
-                            :label="getTranslation(`${componentName}.table.create.inputs.state.label`)"
+                            :label="getTranslation(`permissions_sections.table.create.inputs.state.label`)"
                             v-validate="'required'"
                             name="create-state"
                             single-line
@@ -128,20 +128,20 @@
                     {
                         align: 'center',
                         class: 'text-xs-center',
-                        text: this.getTranslation(`${this.componentName}.table.headers.id.text`),
+                        text: this.getTranslation(`permissions_sections.table.headers.id.text`),
                         value: 'id',
                         width: '80px'
                     },
                     {
                         align: 'center',
-                        text: this.getTranslation(`${this.componentName}.table.headers.name.text`),
+                        text: this.getTranslation(`permissions_sections.table.headers.name.text`),
                         value: 'name',
                     },
                     {
                         align: 'center',
                         searchable: false,
                         sortable: true,
-                        text: this.getTranslation(`${this.componentName}.table.headers.state.text`),
+                        text: this.getTranslation(`permissions_sections.table.headers.state.text`),
                         value: 'state',
                         width: '50px'
                     },
@@ -149,18 +149,18 @@
                         align: 'center',
                         searchable: false,
                         sortable: false,
-                        text: this.getTranslation(`${this.componentName}.table.headers.delete.text`),
+                        text: this.getTranslation(`permissions_sections.table.headers.delete.text`),
                         value: 'delete',
                         width: '50px'
                     }
                 ],
                 componentStateItems: [
                     {
-                        text: this.getTranslation(`${this.componentName}.state.enabled.text`),
+                        text: this.getTranslation(`permissions_sections.state.enabled.text`),
                         value: this.componentName == 'permissions' ? PERMISSION_CONSTANTS.STATE_ENABLED : SECTION_CONSTANTS.STATE_ENABLED
                     },
                     {
-                        text: this.getTranslation(`${this.componentName}.state.disabled.text`),
+                        text: this.getTranslation(`permissions_sections.state.disabled.text`),
                         value: this.componentName == 'permissions' ? PERMISSION_CONSTANTS.STATE_DISABLED : SECTION_CONSTANTS.STATE_DISABLED
                     },
                 ],

@@ -18,7 +18,11 @@
     "vuetify": "^0.17.1"
   },
   "description": "Typescript-vuetify willypuzzle/laravel-permission web interface",
-  "devDependencies": {},
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-ts": "^6.0.0-beta.17",
+    "typescript": "^2.6.2"
+  },
   "directories": {},
   "homepage": "https://github.com/willypuzzle/ts-vuetify-dom-laravel-permission",
   "keywords": [
@@ -42,5 +46,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.1.1-alpha.17"
+  "version": "1.0.0-alpha.2"
 }
