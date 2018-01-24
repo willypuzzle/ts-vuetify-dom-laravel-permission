@@ -140,7 +140,7 @@
 <script lang="ts">
     import Vue, { ComponentOptions } from 'vue';
     import Datatable from 'ts-vuetify-dom-datatable';
-    import GeneralComponent, {GeneralComponentInterface} from './mixins/General.vue';
+    import GeneralComponent from './mixins/General.vue';
 
     import axios from 'axios'
 
@@ -151,19 +151,7 @@
 
     import * as ROLES_CONSTANTS from '../constants/roles'
 
-    interface RolesComponent extends GeneralComponentInterface{
-        rolesStateItems: Array<StateSelectItem>;
-        showUserManagement: boolean;
-        userDownloadUrl: string;
-        users: Array<User>;
-        userButtonLoading: boolean;
-        usersCache: Array<number>;
-        usersDialog: boolean;
-        usersDialogLoading: boolean;
-        usersItemCache: any;
-    }
-
-    export default {
+    export default Vue.extend({
         mixins: [GeneralComponent],
         components: {
             'datatable': Datatable
@@ -205,26 +193,26 @@
                     {
                         align: 'center',
                         class: 'text-xs-center',
-                        text: this.getTranslation('roles.table.headers.id.text'),
+                        text: (this as any).getTranslation('roles.table.headers.id.text'),
                         value: 'id',
                         width: '80px'
                     },
                     {
                         align: 'center',
-                        text: this.getTranslation('roles.table.headers.name.text'),
+                        text: (this as any).getTranslation('roles.table.headers.name.text'),
                         value: 'name',
-                        hidden: !this.showName
+                        hidden: !(this as any).showName
                     },
                     {
                         align: 'center',
-                        text: this.getTranslation('roles.table.headers.label.text'),
+                        text: (this as any).getTranslation('roles.table.headers.label.text'),
                         value: 'label',
                     },
                     {
                         align: 'center',
                         searchable: false,
                         sortable: true,
-                        text: this.getTranslation('roles.table.headers.state.text'),
+                        text: (this as any).getTranslation('roles.table.headers.state.text'),
                         value: 'state',
                         width: '50px'
                     },
@@ -232,25 +220,25 @@
                         align: 'center',
                         searchable: false,
                         sortable: false,
-                        text: this.getTranslation('roles.table.headers.delete.text'),
+                        text: (this as any).getTranslation('roles.table.headers.delete.text'),
                         value: 'delete',
                         width: '50px'
                     }
                 ],
                 rolesStateItems: [
                     {
-                        text: this.getTranslation('roles.state.enabled.text'),
+                        text: (this as any).getTranslation('roles.state.enabled.text'),
                         value: ROLES_CONSTANTS.STATE_ENABLED
                     },
                     {
-                        text: this.getTranslation('roles.state.disabled.text'),
+                        text: (this as any).getTranslation('roles.state.disabled.text'),
                         value: ROLES_CONSTANTS.STATE_DISABLED
                     },
                 ],
                 transport: {
-                    axios: this.table.axios ? this.table.axios : ( this.axios ? this.axios : axios),
+                    axios: (this as any).table.axios ? (this as any).table.axios : ( (this as any).axios ? (this as any).axios : axios),
                     create: {
-                        url: this.urlPrefix,
+                        url: (this as any).urlPrefix,
                         data: {
                             models: {
                                 name: null,
@@ -262,7 +250,7 @@
                             defaults: {
                                 name: null,
                                 label: null,
-                                locale: this.locale,
+                                locale: (this as any).locale,
                                 state: ROLES_CONSTANTS.STATE_DISABLED,
                                 users: []
                             }
@@ -270,18 +258,18 @@
                     },
                     delete:{
                         url: (obj : any) : string => {
-                            return this.urlPrefix + '/' + obj.id
+                            return (this as any).urlPrefix + '/' + obj.id
                         }
                     },
                     multi_delete: {
-                        url: this.urlPrefix + '/multi_delete'
+                        url: (this as any).urlPrefix + '/multi_delete'
                     },
                     read: {
-                        url: this.urlPrefix + `/data`
+                        url: (this as any).urlPrefix + `/data`
                     },
                     update: {
                         url: (obj: any) : string => {
-                            return this.urlPrefix + '/' + obj.id
+                            return (this as any).urlPrefix + '/' + obj.id
                         }
                     }
                 },
@@ -311,5 +299,5 @@
                 }
             },
         }
-    } as ComponentOptions<RolesComponent>;
+    });
 </script>

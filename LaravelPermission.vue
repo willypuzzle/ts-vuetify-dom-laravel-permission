@@ -45,9 +45,11 @@
                 :component-name="section"
                 :locale="locale"
                 :axios="axios"
-                :url-prefix="`${this.urlPrefix}/sections${sectionDownloadUrlType}`"
+                :url-prefix="`${this.urlPrefix}/sections`"
                 :event-bus-configuration="eventBusConfiguration"
                 :show-name="showName"
+                :section-types="sectionTypesStripped"
+                :section-type-id="sectionTypeId"
         ></permissions-sections>
         <permissions-sections
                 v-else-if="ready && section === 'section_types'"
@@ -208,12 +210,14 @@
                 sectionTypesStripped: [],
                 axiosChoosen: this.axios || axios,
                 sectionTypesDownloadUrl: `${this.urlPrefix}/section_types`,
-                sectionDownloadUrlType: ''
+                sectionDownloadUrlType: '',
+                sectionTypeId: null
             }
         },
         watch: {
             sectionTypeSelected(val){
                 this.sectionDownloadUrlType = `/${val}`;
+                this.sectionTypeId = val;
                 this.ready = false;
                 this.$nextTick(() => {
                     this.ready = true;

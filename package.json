@@ -12,7 +12,7 @@
     "randomstring": "^1.1.5",
     "ts-vue-dom-helper": ">=0.2.1-alpha.0",
     "ts-vue-dom-waiter": "^0.0.2",
-    "ts-vuetify-dom-datatable": ">=0.1.0-alpha.8",
+    "ts-vuetify-dom-datatable": ">=0.1.0-alpha.11",
     "ts-vuetify-dom-dynamic-matrix": "^0.0.3",
     "ts-vuetify-dom-field": ">=0.1.0-alpha.0",
     "vuetify": "^0.17.1"
@@ -46,5 +46,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.0.0-alpha.3"
+  "version": "1.0.0-alpha.10"
 }

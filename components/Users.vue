@@ -135,7 +135,7 @@
 
     import {COMPONENTS_HELPER, GENERAL_HELPER} from 'ts-vue-dom-helper'
 
-    import GeneralComponent, {GeneralComponentInterface}  from './mixins/General.vue'
+    import GeneralComponent from './mixins/General.vue'
 
     import VuetifyField, {Field, Value} from 'ts-vuetify-dom-field'
 
@@ -155,26 +155,12 @@
         hideSurname?: boolean;
     }
 
-    interface UsersComponent extends GeneralComponentInterface{
-        $validator: any;
-        confirmRolesDialog();
-        openDetailFunction(item : any, $event? : any);
-        roles: Role[];
-        rolesButtonLoading: boolean;
-        rolesCache: number[];
-        rolesDialog: boolean;
-        rolesDialogLoading: boolean;
-        rolesItemCache: any;
-        userStateItems: Array<StateSelectItem>;
-        user: UserDefinition;
-    }
-
     export {
         UserDefinition,
         UserField
     }
 
-    export default {
+    export default Vue.extend({
         created(){
             this.rolesButtonLoading = true;
             this.transport.axios.get(this.rolesDownloadUrl).then((response) => {
@@ -266,35 +252,35 @@
                     {
                         align: 'center',
                         class: 'text-xs-center',
-                        text: this.getTranslation('users.table.headers.id.text'),
+                        text: (this as any).getTranslation('users.table.headers.id.text'),
                         value: 'id',
                         width: '80px'
                     },
                     {
                         align: 'center',
-                        text: this.getTranslation('users.table.headers.name.text'),
+                        text: (this as any).getTranslation('users.table.headers.name.text'),
                         value: 'name',
                     },
                     {
                         align: 'center',
-                        text: this.getTranslation('users.table.headers.surname.text'),
+                        text: (this as any).getTranslation('users.table.headers.surname.text'),
                         value: 'name',
-                        hidden: this.user.hideSurname
+                        hidden: ((this as any) as any).user.hideSurname
                     },
                     {
                         align: 'center',
                         searchable: false,
                         sortable: true,
-                        text: this.getTranslation('users.table.headers.state.text'),
+                        text: (this as any).getTranslation('users.table.headers.state.text'),
                         value: 'state',
                         width: '50px',
-                        hidden: !this.user.state
+                        hidden: !((this as any) as any).user.state
                     },
                     {
                         align: 'center',
                         searchable: false,
                         sortable: false,
-                        text: this.getTranslation('users.table.headers.roles.text'),
+                        text: (this as any).getTranslation('users.table.headers.roles.text'),
                         value: 'roles',
                         width: '50px'
                     },
@@ -302,16 +288,16 @@
                         align: 'center',
                         searchable: false,
                         sortable: false,
-                        text: this.getTranslation('users.table.headers.detail.text'),
+                        text: (this as any).getTranslation('users.table.headers.detail.text'),
                         value: 'detail',
                         width: '50px',
-                        hidden: !this.openDetailFunction
+                        hidden: !((this as any) as any).openDetailFunction
                     },
                     {
                         align: 'center',
                         searchable: false,
                         sortable: false,
-                        text: this.getTranslation('users.table.headers.delete.text'),
+                        text: (this as any).getTranslation('users.table.headers.delete.text'),
                         value: 'delete',
                         width: '50px'
                     }
@@ -324,16 +310,16 @@
                 rolesItemCache: null,
                 userStateItems: [
                     {
-                        text: this.getTranslation('users.state.enabled.text')
+                        text: (this as any).getTranslation('users.state.enabled.text')
                     },
                     {
-                        text: this.getTranslation('users.state.disabled.text')
+                        text: (this as any).getTranslation('users.state.disabled.text')
                     },
                 ],
                 transport: {
-                    axios: this.table.axios ? this.table.axios : ( this.axios ? this.axios : axios),
+                    axios: (this as any).table.axios ? (this as any).table.axios : ( (this as any).axios ? (this as any).axios : axios),
                     create: {
-                        url: this.urlPrefix,
+                        url: (this as any).urlPrefix,
                         data: {
                             models: {},
                             defaults: {}
@@ -346,18 +332,18 @@
                     },
                     delete:{
                         url: (obj : any) : string => {
-                            return this.urlPrefix + '/' + obj.id
+                            return (this as any).urlPrefix + '/' + obj.id
                         }
                     },
                     multi_delete: {
-                        url: this.urlPrefix + '/multi_delete'
+                        url: (this as any).urlPrefix + '/multi_delete'
                     },
                     read: {
-                        url: this.urlPrefix + `/data`
+                        url: (this as any).urlPrefix + `/data`
                     },
                     update: {
                         url: (obj: any) : string => {
-                            return this.urlPrefix + '/' + obj.id
+                            return (this as any).urlPrefix + '/' + obj.id
                         }
                     }
                 },
@@ -401,5 +387,5 @@
                 })
             }
         }
-    } as ComponentOptions<UsersComponent>;
+    });
 </script>

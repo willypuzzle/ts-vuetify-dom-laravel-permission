@@ -10,24 +10,7 @@
 
     import randomstring from 'randomstring'
 
-    interface GeneralComponent extends Vue{
-        axios: AxiosStatic;
-        headers: Array<Header>;
-        eventBusConfiguration: EventBusConfiguration;
-        lang();
-        locale: string;
-        getTranslation(key : string, parameter? : object);
-        transport: Transport;
-        table: TableDefinition;
-        tryToactivateWaiter(enable : boolean);
-        urlPrefix: string;
-    }
-
-    export {
-        GeneralComponent as GeneralComponentInterface
-    }
-
-    export default {
+    export default Vue.extend({
         mixins: [EventBusManager, Translator],
         props:{
             axios: {
@@ -76,5 +59,5 @@
                 models.locale = locale;
             }
         }
-    } as ComponentOptions<GeneralComponent>;
+    });
 </script>

@@ -30,7 +30,7 @@
 <script lang="ts">
     import Vue, { ComponentOptions } from 'vue';
 
-    import GeneralComponent, {GeneralComponentInterface}  from './mixins/General.vue'
+    import GeneralComponent from './mixins/General.vue'
 
     import DynamicMatrix, {Column, Row} from 'ts-vuetify-dom-dynamic-matrix'
 
@@ -40,28 +40,7 @@
 
     import {Section} from '../interfaces/section'
 
-    interface AclManagerComponent extends GeneralComponentInterface{
-        axiosChoosen: AxiosStatic;
-        buildColumns(data : Array<{ name: string, id: number }>) : void;
-        buildRows(data : Array<{ name: string, id: number }>) : void;
-        columns: Array<Column>;
-        dataTransferUrl: string;
-        dataTransferUrlWithSection: string;
-        getData() : void;
-        getRowsData(url : string) : Promise<void>;
-        dynamicMatrixReady: boolean;
-        permissionsDownloadUrl: string;
-        ready: boolean;
-        rolesDownloadUrl: string;
-        type: string;
-        rows: Array<Row>;
-        sections: Array<Section>
-        sectionsDownloadUrl: string;
-        selectedSection: number;
-        usersDownloadUrl: string;
-    }
-
-    export default {
+    export default Vue.extend({
         mixins: [GeneralComponent],
         components: {
             'dynamic-matrix': DynamicMatrix
@@ -81,7 +60,7 @@
         },
         data(){
             return {
-                axiosChoosen: this.axios || axios,
+                axiosChoosen: (this as any).axios || axios,
                 columns: [],
                 dataTransferUrlWithSection: null,
                 dynamicMatrixReady: false,
@@ -168,5 +147,5 @@
                 this.getData();
             }
         }
-    } as ComponentOptions<AclManagerComponent>;
+    });
 </script>

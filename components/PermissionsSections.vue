@@ -80,6 +80,14 @@
                             autocomplete="off"
                     ></v-text-field>
                     <v-select
+                            v-if="checkSectionTypes()"
+                            :items="sectionTypes"
+                            v-model="transport.create.data.models.section_type_id"
+                            :label="getTranslation('permissions_sections.general.section_types.label')"
+                            item-text="label"
+                            item-value="id"
+                    > </v-select>
+                    <v-select
                             :items="componentStateItems"
                             v-model="transport.create.data.models.state"
                             :label="getTranslation(`permissions_sections.table.create.inputs.state.label`)"
@@ -97,21 +105,17 @@
 <script lang="ts">
     import Vue, { ComponentOptions } from 'vue';
     import Datatable from 'ts-vuetify-dom-datatable';
-    import GeneralComponent, {GeneralComponentInterface} from './mixins/General.vue';
+    import GeneralComponent from './mixins/General.vue';
 
     import axios from 'axios'
 
-    import {StateSelectItem} from '../interfaces/general'
+    import {StateSelectItem, StateDefinition} from '../interfaces/general'
 
     import * as PERMISSION_CONSTANTS from '../constants/permissions'
     import * as SECTION_CONSTANTS from '../constants/sections'
+    import * as SECTION_TYPE_CONSTANTS from '../constants/section_types'
 
-    interface PermissionsSectionsComponent extends GeneralComponentInterface{
-        componentName: string;
-        componentStateItems: Array<StateSelectItem>;
-    }
-
-    export default {
+    export default Vue.extend({
         mixins: [GeneralComponent],
         components: {
             'datatable': Datatable
@@ -120,6 +124,15 @@
             componentName: {
                 type: String,
                 required: true
+            },
+            sectionTypes: {
+                type: Array,
+                default(){
+                    return [];
+                }
+            },
+            sectionTypeId: {
+                default: null
             }
         },
         data(){
@@ -128,20 +141,20 @@
                     {
                         align: 'center',
                         class: 'text-xs-center',
-                        text: this.getTranslation(`permissions_sections.table.headers.id.text`),
+                        text: (this as any).getTranslation(`permissions_sections.table.headers.id.text`),
                         value: 'id',
                         width: '80px'
                     },
                     {
                         align: 'center',
-                        text: this.getTranslation(`permissions_sections.table.headers.name.text`),
+                        text: (this as any).getTranslation(`permissions_sections.table.headers.name.text`),
                         value: 'name',
                     },
                     {
                         align: 'center',
                         searchable: false,
                         sortable: true,
-                        text: this.getTranslation(`permissions_sections.table.headers.state.text`),
+                        text: (this as any).getTranslation(`permissions_sections.table.headers.state.text`),
                         value: 'state',
                         width: '50px'
                     },
@@ -149,58 +162,77 @@
                         align: 'center',
                         searchable: false,
                         sortable: false,
-                        text: this.getTranslation(`permissions_sections.table.headers.delete.text`),
+                        text: (this as any).getTranslation(`permissions_sections.table.headers.delete.text`),
                         value: 'delete',
                         width: '50px'
                     }
                 ],
                 componentStateItems: [
                     {
-                        text: this.getTranslation(`permissions_sections.state.enabled.text`),
-                        value: this.componentName == 'permissions' ? PERMISSION_CONSTANTS.STATE_ENABLED : SECTION_CONSTANTS.STATE_ENABLED
+                        text: (this as any).getTranslation(`permissions_sections.state.enabled.text`),
+                        value: (this as any).getStateConstants().STATE_ENABLED
                     },
                     {
-                        text: this.getTranslation(`permissions_sections.state.disabled.text`),
-                        value: this.componentName == 'permissions' ? PERMISSION_CONSTANTS.STATE_DISABLED : SECTION_CONSTANTS.STATE_DISABLED
+                        text: (this as any).getTranslation(`permissions_sections.state.disabled.text`),
+                        value: (this as any).getStateConstants().STATE_DISABLED
                     },
                 ],
                 transport: {
-                    axios: this.table.axios ? this.table.axios : ( this.axios ? this.axios : axios),
+                    axios: (this as any).table.axios ? (this as any).table.axios : ( (this as any).axios ? (this as any).axios : axios),
                     create: {
-                        url: this.urlPrefix,
+                        url: (this as any).urlPrefix,
                         data: {
                             models: {
                                 label: null,
                                 locale: null,
                                 name: null,
+                                section_type_id: (this as any).checkSectionTypes() ? null : undefined,
                                 state: null
                             },
                             defaults: {
                                 label: null,
-                                locale: this.locale,
+                                locale: (this as any).locale,
                                 name: null,
-                                state: this.componentName == 'permissions' ? PERMISSION_CONSTANTS.STATE_DISABLED : SECTION_CONSTANTS.STATE_DISABLED
+                                section_type_id: (this as any).checkSectionTypes() ? null : undefined,
+                                state: (this as any).getStateConstants().STATE_DISABLED
                             }
                         }
                     },
                     delete:{
                         url: (obj : any) : string => {
-                            return this.urlPrefix + '/' + obj.id
+                            return (this as any).urlPrefix + '/' + obj.id
                         }
                     },
                     multi_delete: {
-                        url: this.urlPrefix + '/multi_delete'
+                        url: (this as any).urlPrefix + '/multi_delete'
                     },
                     read: {
-                        url: this.urlPrefix + "/data"
+                        url: (this as any).urlPrefix + "/data" + ((this as any).checkSectionTypes() && (this as any).sectionTypeId ? `/${(this as any).sectionTypeId}` : '')
                     },
                     update: {
                         url: (obj: any) : string => {
-                            return this.urlPrefix + '/' + obj.id
+                            return (this as any).urlPrefix + '/' + obj.id
                         }
                     }
                 }
             }
+        },
+        methods: {
+            checkSectionTypes(){
+                return this.componentName === 'sections' && this.sectionTypes.length > 0;
+            },
+            getStateConstants() : StateDefinition{
+                switch (this.componentName){
+                    case 'sections':
+                        return SECTION_CONSTANTS;
+                    case 'section_types':
+                        return SECTION_TYPE_CONSTANTS;
+                    case 'permissions':
+                        return PERMISSION_CONSTANTS;
+                    default:
+                        throw `${this.componentName} is unknown`
+                }
+            }
         }
-    } as ComponentOptions<PermissionsSectionsComponent>;
+    });
 </script>
