@@ -133,7 +133,7 @@
 
     import _ from 'lodash'
 
-    import {COMPONENTS_HELPER, GENERAL_HELPER} from 'ts-vue-dom-helper'
+    import {COMPONENTS_HELPER, GENERAL_HELPER, HTTP_CODES} from 'ts-vue-dom-helper'
 
     import GeneralComponent from './mixins/General.vue'
 
@@ -326,7 +326,7 @@
                         },
                         errors:{
                             codes:{
-                                disabled: [422]
+                                disabled: [HTTP_CODES.UNPROCESSABLE_ENTITY]
                             }
                         }
                     },

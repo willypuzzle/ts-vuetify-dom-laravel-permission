@@ -6,6 +6,8 @@
                 :locale="locale"
                 :transport="transport"
                 add
+                @deleted-error="manageDeleteError($event)"
+                @multi-deleted-error="manageDeleteError($event)"
         >
             <template slot="columns" slot-scope="props">
                 <td class="text-xs-center">{{ props.item.id }}</td>
@@ -60,7 +62,7 @@
                     </v-btn>
                 </td>
             </template>
-            <div slot="create_title">{{ getTranslation(`permissions_sections.table.create.title`) }}</div>
+            <div slot="create_title">{{ getTranslation(`permissions_sections.table.create.title.${componentName}`) }}</div>
             <template slot="create_content" slot-scope="props">
                 <div>
                     <v-text-field
@@ -99,12 +101,37 @@
                 </div>
             </template>
         </datatable>
+        <v-dialog v-model="sectionTypesDeleteError" max-width="600px">
+            <v-card>
+                <v-card-title>
+                    <slot name="general_error_title">
+                        <span class="headline">
+                            {{ getTranslation(`permissions_sections.errors.section_types.reference_error.title`) }}
+                        </span>
+                    </slot>
+                </v-card-title>
+                <v-card-text>
+                    <slot name="general_error_content">
+                        {{ getTranslation(`permissions_sections.errors.section_types.reference_error.content`) }}
+                    </slot>
+                </v-card-text>
+                <slot name="delete_actions">
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn class="blue--text darken-1" flat @click.native="sectionTypesDeleteError = false">
+                            {{ getTranslation(`general.close.label`) }}
+                        </v-btn>
+                    </v-card-actions>
+                </slot>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
 <script lang="ts">
     import Vue, { ComponentOptions } from 'vue';
     import Datatable from 'ts-vuetify-dom-datatable';
+    import {HTTP_CODES} from 'ts-vue-dom-helper'
     import GeneralComponent from './mixins/General.vue';
 
     import axios from 'axios'
@@ -137,6 +164,7 @@
         },
         data(){
             return {
+                sectionTypesDeleteError: false,
                 headers: [
                     {
                         align: 'center',
@@ -149,6 +177,12 @@
                         align: 'center',
                         text: (this as any).getTranslation(`permissions_sections.table.headers.name.text`),
                         value: 'name',
+                        hidden: !(this as any).showName
+                    },
+                    {
+                        align: 'center',
+                        text: (this as any).getTranslation(`permissions_sections.table.headers.label.text`),
+                        value: 'label'
                     },
                     {
                         align: 'center',
@@ -201,10 +235,20 @@
                     delete:{
                         url: (obj : any) : string => {
                             return (this as any).urlPrefix + '/' + obj.id
+                        },
+                        errors:{
+                            codes:{
+                                disabled: (this as any).componentName === 'section_types' ? [HTTP_CODES.CONFLICT] : []
+                            }
                         }
                     },
                     multi_delete: {
-                        url: (this as any).urlPrefix + '/multi_delete'
+                        url: (this as any).urlPrefix + '/multi_delete',
+                        errors:{
+                            codes:{
+                                disabled: (this as any).componentName === 'section_types' ? [HTTP_CODES.CONFLICT] : []
+                            }
+                        }
                     },
                     read: {
                         url: (this as any).urlPrefix + "/data" + ((this as any).checkSectionTypes() && (this as any).sectionTypeId ? `/${(this as any).sectionTypeId}` : '')
@@ -231,6 +275,13 @@
                         return PERMISSION_CONSTANTS;
                     default:
                         throw `${this.componentName} is unknown`
+                }
+            },
+            manageDeleteError(err){
+                if(this.componentName === 'section_types'){
+                    if(err.response.status === HTTP_CODES.CONFLICT){
+                        this.sectionTypesDeleteError = true;
+                    }
                 }
             }
         }

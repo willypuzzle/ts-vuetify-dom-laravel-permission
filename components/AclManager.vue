@@ -9,9 +9,10 @@
             </v-flex>
             <v-flex xs12 md6>
                 <v-select
-                        :items="sections"
-                        item-text="name"
+                        :items="strippedSections"
+                        item-text="label"
                         item-value="id"
+                        :label="getTranslation('permissions_sections.general.sections.label')"
                         v-model="selectedSection"
                 ></v-select>
             </v-flex>
@@ -40,6 +41,8 @@
 
     import {Section} from '../interfaces/section'
 
+    import {stripForSelect} from '../helpers/i18n'
+
     export default Vue.extend({
         mixins: [GeneralComponent],
         components: {
@@ -50,6 +53,7 @@
             let url = this.sectionsDownloadUrl;
             this.axiosChoosen.get(url).then((response) => {
                 this.sections = <Section[]> response.data;
+                this.strippedSections = stripForSelect(this.sections, this.locale)
                 this.ready = true;
             }).catch((err) => {
                 console.trace();
@@ -68,6 +72,7 @@
                 rows: [],
                 sections: [],
                 selectedSection: null,
+                strippedSections: [],
                 type: null
             }
         },
@@ -91,11 +96,13 @@
                 }else{
                     url = this.rolesDownloadUrl;
                 }
+                this.tryToactivateWaiter(true);
                 this.getRowsData(url).then(() => {
                     return this.axiosChoosen.get(this.permissionsDownloadUrl).then((response) => {
                         this.buildColumns(response.data);
                     })
                 }).then(() => {
+                    this.tryToactivateWaiter(false);
                     this.$nextTick(() => {
                         this.dynamicMatrixReady = true;
                     })

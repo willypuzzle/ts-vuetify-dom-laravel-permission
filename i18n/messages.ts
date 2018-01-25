@@ -1,5 +1,10 @@
 export default {
     it: {
+        general: {
+            close:{
+                label: 'Chiudi'
+            }
+        },
         manager: {
             toolbar:  {
                 selectors: {
@@ -15,7 +20,18 @@ export default {
             }
         },
         permissions_sections: {
+            errors: {
+                section_types: {
+                    reference_error:{
+                        title: "Errore di riferimento",
+                        content: 'Il modulo o i moduli che si stanno cercando di eliminare sono referenziati nella tabella delle sezioni'
+                    }
+                }
+            },
             general: {
+                sections: {
+                    label: 'Sezioni'
+                },
                 section_types: {
                     label: 'Moduli'
                 }
@@ -30,7 +46,11 @@ export default {
             },
             table: {
                 create: {
-                    title: 'Nuova Sezione',
+                    title: {
+                        permissions: 'Nuovo Permesso',
+                        section_types: 'Nuovo Modulo',
+                        sections: 'Nuova Sezione',
+                    },
                     inputs: {
                         name: {
                             label: 'Codice'
@@ -111,7 +131,7 @@ export default {
                         text: 'Codice'
                     },
                     label: {
-                        label: 'Nome'
+                        text: 'Nome'
                     },
                     state: {
                         text: 'Stato'
@@ -204,6 +224,11 @@ export default {
         }
     },
     en: {
+        general: {
+            close:{
+                label: 'Close'
+            }
+        },
         manager: {
             toolbar:  {
                 selectors: {
@@ -219,9 +244,20 @@ export default {
             }
         },
         permissions_sections: {
-            general: {
+            errors: {
                 section_types: {
-                    label: 'Moduls'
+                    reference_error:{
+                        title: "Reference Error",
+                        content: 'Modules you are trying to delete are referenced in sections table'
+                    }
+                }
+            },
+            general: {
+                sections: {
+                    label: 'Sections'
+                },
+                section_types: {
+                    label: 'Modules'
                 }
             },
             state: {
@@ -234,7 +270,11 @@ export default {
             },
             table: {
                 create: {
-                    title: 'New Section',
+                    title: {
+                        permissions: 'New Permission',
+                        section_types: 'New Module',
+                        sections: 'New Section',
+                    },
                     inputs: {
                         name: {
                             label: 'Code'
@@ -309,6 +349,9 @@ export default {
                         text: 'ID'
                     },
                     name:{
+                        text: 'Code'
+                    },
+                    label: {
                         text: 'Name'
                     },
                     state: {
