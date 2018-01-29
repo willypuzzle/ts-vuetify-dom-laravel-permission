@@ -21,6 +21,7 @@
                         v-if="dynamicMatrixReady"
                         :rows="rows"
                         :columns="columns"
+                        :locale="locale"
                         :url-prefix="dataTransferUrlWithSection"
                 ></dynamic-matrix>
             </v-flex>
@@ -77,16 +78,17 @@
             }
         },
         methods: {
-            buildRows(data : Array<{ name: string, id: number }>) : void{
+            buildRows(data : Array<{ name: string, surname?: string, label?: any, id: number }>) : void{
                 this.rows = [];
                 _.each(data, (el) => {
-                    this.rows.push({ key: String(el.id), name: `${el.name}-(${el.id})`});
+                    let name = el.label && el.label[this.locale] ? el.label[this.locale] : (el.surname ? `${el.surname} ${el.name}` : el.name);
+                    this.rows.push({ key: String(el.id), name: `${name}-(${el.id})`});
                 })
             },
-            buildColumns(data : Array<{ name: string, id: number }>) : void{
+            buildColumns(data : Array<{ name: string, label?: any, id: number }>) : void{
                 this.columns = [];
                 _.each(data, (el) => {
-                    this.columns.push({ key: String(el.id), name: `${el.name}`});
+                    this.columns.push({ key: String(el.id), name: `${el.label && el.label[this.locale] ? el.label[this.locale] : el.name}`});
                 })
             },
             getData() : void{
@@ -98,7 +100,7 @@
                 }
                 this.tryToactivateWaiter(true);
                 this.getRowsData(url).then(() => {
-                    return this.axiosChoosen.get(this.permissionsDownloadUrl).then((response) => {
+                    return this.axiosChoosen.get(this.permissionsDownloadUrl, {params: {locale: this.locale}}).then((response) => {
                         this.buildColumns(response.data);
                     })
                 }).then(() => {
@@ -109,7 +111,7 @@
                 })
             },
             getRowsData(url : string) : Promise<void>{
-                return this.axiosChoosen.get(url).then((response) => {
+                return this.axiosChoosen.get(url, {params: {locale: this.locale}}).then((response) => {
                     this.buildRows(response.data);
                 })
             }
