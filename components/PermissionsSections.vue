@@ -182,7 +182,9 @@
                     {
                         align: 'center',
                         text: (this as any).getTranslation(`permissions_sections.table.headers.label.text`),
-                        value: 'label'
+                        value: 'label',
+                        json: (this as any).locale,
+                        fallback: 'name'
                     },
                     {
                         align: 'center',

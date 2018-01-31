@@ -207,6 +207,8 @@
                         align: 'center',
                         text: (this as any).getTranslation('roles.table.headers.label.text'),
                         value: 'label',
+                        json: (this as any).locale,
+                        fallback: 'name'
                     },
                     {
                         align: 'center',
