@@ -208,8 +208,8 @@
                 sectionTypes: null,
                 sectionTypeSelected: null,
                 sectionTypesStripped: [],
-                axiosChoosen: this.axios || axios,
-                sectionTypesDownloadUrl: `${this.urlPrefix}/section_types`,
+                axiosChoosen: (this as any).axios || axios,
+                sectionTypesDownloadUrl: `${(this as any).urlPrefix}/section_types`,
                 sectionDownloadUrlType: '',
                 sectionTypeId: null
             }
